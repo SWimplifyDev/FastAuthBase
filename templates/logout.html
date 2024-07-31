@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'components/head.html' %}
+    <title>SWimplify>_ | Login</title>
+</head>
+
+<body data-bs-theme="dark">
+
+    <!-- SWimplify SIGNIN FORM -->
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div style="width: 100%; max-width: 500px;">
+            <h2 class="mb-3 font-monospace">SWimplify>_</h2>
+            <form class="shadow-lg p-4 border rounded" action="/logout" method="post">
+                <input type="hidden" name="csrftoken" value="{{ request.scope.csrftoken() }}">
+                <h3 class="mb-3">Logout</h3>
+                <p>Are you sure?</p>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-custom">Yes, logout</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <!-- SWimplify SIGNIN FORM END -->
+
+    <!-- Scritps -->
+    {% include 'components/scripts.html' %}
+</body>
+
+</html>

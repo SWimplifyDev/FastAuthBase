@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 81
+lint.select = ["F", "E", "W", "I"]
+
+[tool.black]
+line-length = 81

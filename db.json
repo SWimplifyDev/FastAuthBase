@@ -5,6 +5,12 @@
             "email": "swimplify@me.com",
             "full_name": "SWimplify",
             "password": "$2b$12$vrR0eC3ckPf/n748Bv6rMOI23YjdZJDzIc8aCB/3hOaHSTOD3SBxe"
+        },
+        "2": {
+            "disabled": false,
+            "email": "user@example.com",
+            "full_name": "user",
+            "password": "$2b$12$GWHIRPrdb0gI0T7Qaa9VNewBBG1iknj7ZkVYQjiMiCJ7IKF1SizoG"
         }
     }
 }

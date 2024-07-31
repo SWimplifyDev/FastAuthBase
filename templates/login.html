@@ -1,53 +1,58 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        {% include 'components/head.html' %}
-        <title>SWimplify>_ | Login</title>  
-    </head>
-    <body data-bs-theme="dark">
 
-        <!-- SWimplify SIGNIN FORM -->
-        <div class="d-flex justify-content-center align-items-center vh-100">
-            <div style="width: 100%; max-width: 500px;">
-                <h2 class="mb-3 font-monospace">SWimplify>_</h2>
-                <form class="shadow-lg p-4 border rounded" action="/token" method="post">
-                    <h3 class="mb-3">Sigin in to your account</h3>
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Email address</label>
-                      <input type="email" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
-                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
-                    </div>
-                    <div class="d-grid mt-4">
-                        <button  type="submit" class="btn btn-custom">Sign in</button>
-                    </div>
+<head>
+    {% include 'components/head.html' %}
+    <title>SWimplify>_ | Login</title>
+</head>
 
-                    <!-- ERROR MESSAGE -->
-                     {% if error_messsage %}
-                        <div class="mt-3 text-danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            {{ error_messsage }}   
-                        </div>
-                    {% endif %}
-                    <!-- ERROR MESSAGE END -->
+<body data-bs-theme="dark">
 
-                    <!-- WELCOM TO LOGIN MESSAGE -->
-                    {% if success_message %}
-                        <div class="mt-3 text-success">
-                            <i class="bi bi-check-circle-fill"></i>
-                            {{ success_message }}   
-                        </div>
-                    {% endif %}
-                    <!-- WELCOM TO LOGIN MESSAGE END -->
-                </form> 
-            </div>
+    <!-- SWimplify SIGNIN FORM -->
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div style="width: 100%; max-width: 500px;">
+            <h2 class="mb-3 font-monospace">SWimplify>_</h2>
+            <form class="shadow-lg p-4 border rounded" action="/token" method="post">
+                <input type="hidden" name="csrftoken" value="{{ request.scope.csrftoken() }}">
+                <h3 class="mb-3">Sigin in to your account</h3>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" name="username" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp" required>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-custom">Sign in</button>
+                </div>
+
+                <!-- ERROR MESSAGE -->
+                {% if error_messsage %}
+                <div class="mt-3 text-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    {{ error_messsage }}
+                </div>
+                {% endif %}
+                <!-- ERROR MESSAGE END -->
+
+                <!-- WELCOM TO LOGIN MESSAGE -->
+                {% if success_message %}
+                <div class="mt-3 text-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    {{ success_message }}
+                </div>
+                {% endif %}
+                <!-- WELCOM TO LOGIN MESSAGE END -->
+            </form>
         </div>
-        <!-- SWimplify SIGNIN FORM END -->
+    </div>
+    <!-- SWimplify SIGNIN FORM END -->
 
-        <!-- Scritps -->
-        {% include 'components/scripts.html' %}
-    </body>
+    <!-- Scritps -->
+    {% include 'components/scripts.html' %}
+</body>
+
 </html>
