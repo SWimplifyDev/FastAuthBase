@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% include 'components/head.html' %}
+        <title>SWimplify>_ | Dashboard</title>
+    </head>
+    <body data-bs-theme="dark">
+        <div class="container">
+            <h2 class="mt-5">Hello, {{ user }}</h2>
+            <form action="/logout" method="post">
+                <button  type="submit" class="btn btn-custom">Logout</button>
+            </form>    
+        </div>
+        {% include 'components/scripts.html' %}
+    </body>
+</html>

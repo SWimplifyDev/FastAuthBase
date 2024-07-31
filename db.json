@@ -1,0 +1,10 @@
+{
+    "users": {
+        "1": {
+            "disabled": false,
+            "email": "swimplify@me.com",
+            "full_name": "SWimplify",
+            "password": "$2b$12$vrR0eC3ckPf/n748Bv6rMOI23YjdZJDzIc8aCB/3hOaHSTOD3SBxe"
+        }
+    }
+}
