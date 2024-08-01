@@ -1,18 +1,21 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     {% include 'components/head.html' %}
     <title>SWimplify>_ | Dashboard</title>
 </head>
-
 <body data-bs-theme="dark">
+    <!-- Nav Bar -->
+    {% include 'components/nav.html' %}
+
     <div class="container">
         <h2 class="mt-5">Hello, {{ user }}</h2>
-        <form action="/logout" method="get">
-            <button type="submit" class="btn btn-custom">Logout</button>
-        </form>
     </div>
+
+    <!-- Logout Modal -->
+    {% include 'components/logout-modal.html' %}
+
+    <!-- Scritps -->
     {% include 'components/scripts.html' %}
 </body>
 

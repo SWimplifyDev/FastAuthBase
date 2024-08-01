@@ -1,22 +1,15 @@
 from typing import Annotated, Optional
-
-from asgi_csrf import asgi_csrf
 from fastapi import Cookie, Depends, FastAPI, Form, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
-from fastapi.responses import (
-    HTMLResponse,
-    JSONResponse,
-    RedirectResponse,
-    Response,
-)
+#from asgi_csrf import asgi_csrf
+from config import settings
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
 import auth_manager
 import crud
-from config import settings
 from models import UserInDB
 
 app = FastAPI()
@@ -27,6 +20,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Set up templates directory
 templates = Jinja2Templates(directory="templates")
 
+# Exception Handler
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(status_code=400, content={"detail": "Invalid input. Please check your data and try again."})
 
 ############# HTML RENDER ##############
 ########################################
@@ -35,54 +32,32 @@ templates = Jinja2Templates(directory="templates")
 async def public_page(request: Request):
     return templates.TemplateResponse(request, "public.html")
 
-
 # Form to register a New User
 @app.get("/signup/", response_class=HTMLResponse)
 async def signup_page(request: Request):
     return templates.TemplateResponse(request, "signup.html")
-
 
 # Form to Login a User
 @app.get("/login/", response_class=HTMLResponse)
 async def login_page(request: Request):
     return templates.TemplateResponse(request, "login.html")
 
-
 @app.get("/dashboard")
-async def dash_page(
-    request: Request, session_token: Optional[str] = Cookie(None)
-):
+async def dash_page(request: Request, session_token: Optional[str] = Cookie(None)):
     if session_token:
         user = auth_manager.check_permissions(session_token)
-        return templates.TemplateResponse(
-            request, "dashboard.html", context={"user": user.full_name}
-        )
+        return templates.TemplateResponse(request, "dashboard.html", context={"user": user.full_name})
     return templates.TemplateResponse(request, "login.html")
-
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    request: Request, exc: RequestValidationError
-):
-    return JSONResponse(
-        status_code=400,
-        content={
-            "detail": "Invalid input. Please check your data and try again."
-        },
-    )
-
 
 ############# POST FORMS ###############
 ########################################
 # Register a New User
 @app.post("/signup/")
-async def register_user(
-    request: Request,
-    email: Annotated[str, Form()],
-    full_name: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    retyped_password: Annotated[str, Form()],
-):
+async def register_user(request: Request,
+                        email: Annotated[str, Form()],
+                        full_name: Annotated[str, Form()],
+                        password: Annotated[str, Form()],
+                        retyped_password: Annotated[str, Form()]):
 
     # Verify there is not user registered with same emial address
     error_messsage = None
@@ -96,70 +71,43 @@ async def register_user(
         error_messsage = "Passwords doesn't match."
 
     if error_messsage:
-        return templates.TemplateResponse(
-            request, "signup.html", context={"error_messsage": error_messsage}
-        )
+        return templates.TemplateResponse(request, "signup.html", context={"error_messsage": error_messsage})
 
     # Sanitize and Validate User inputs
-    new_user = UserInDB(
-        email=normalize_email,
-        full_name=full_name,
-        password=auth_manager.get_password_hash(password),
-    )
+    new_user = UserInDB(email=normalize_email,
+                        full_name=full_name,
+                        password=auth_manager.get_password_hash(password))
 
     # Prepare data input and save on DB, the redirect to Login page
     new_user_dict = new_user.model_dump()
     if crud.create_user(new_user_dict):
-        return templates.TemplateResponse(
-            request,
-            "login.html",
-            context={
-                "success_message": "Registration successful. You can now log in."
-            },
-        )
+        return templates.TemplateResponse(request,
+                                          "login.html",
+                                          context={"success_message": "Registration successful. You can now log in."})
     else:
-        return templates.TemplateResponse(
-            request,
-            "login.html",
-            context={
-                "error_messsage": "Registration failed. Please try again later."
-            },
-        )
+        return templates.TemplateResponse(request,
+                                          "login.html",
+                                          context={"error_messsage": "Registration failed. Please try again later."})
 
 
 # Get token by providing username and password
 @app.post("/token")
-async def get_token(
-    request: Request,
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-):
+async def get_token(request: Request,
+                    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     # Find user if exist
     user = auth_manager.authenticate_user(form_data.username, form_data.password)
     if not user:
-        return templates.TemplateResponse(
-            request,
-            "login.html",
-            context={"error_messsage": "Incorrect username or password"},
-        )
+        return templates.TemplateResponse(request,
+                                          "login.html",
+                                          context={"error_messsage": "Incorrect username or password"})
 
     # Create session Token
     session_token = auth_manager.encrypt_user(user.email)
 
     # Redirect to main page and set session cookie on response
-    response = RedirectResponse(
-        url="/dashboard", status_code=status.HTTP_302_FOUND
-    )
+    response = RedirectResponse(url="/dashboard", status_code=status.HTTP_302_FOUND)
     response.set_cookie(key="session_token", value=session_token, httponly=True)
     return response
-
-
-# To logout
-@app.get("/logout")
-async def logout_template(request: Request):
-    return templates.TemplateResponse(
-        request,
-        "logout.html",
-    )
 
 
 @app.post("/logout")
@@ -169,8 +117,6 @@ async def logout(response: Response):
     return response
 
 
-app = asgi_csrf(
-    app,
-    signing_secret=settings.secret_key,
-    always_set_cookie=True,
-)
+# app = asgi_csrf(app,
+#                 signing_secret=settings.secret_key,
+#                 always_set_cookie=True)

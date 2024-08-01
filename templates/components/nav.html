@@ -1,0 +1,20 @@
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1 font-monospace text-custom">SWimplify>_</span>
+        <div class="ms-auto">
+            <span class="navbar-text">
+                {% if user %}
+                    {{ user }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </span>
+            {% if user %}
+                <!-- Button trigger Logout modal -->
+                <button class="btn btn-custom ms-2" type="button" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
+            {% else %}
+                <a class="btn btn-custom ms-2" href="/login">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
