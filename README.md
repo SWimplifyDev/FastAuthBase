@@ -12,3 +12,9 @@
 ```bash
 ./scripts/start.sh
 ```
+
+### Environment variables  
+
+```bash
+./scripts/env.sh
+```

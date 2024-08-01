@@ -37,3 +37,4 @@ websockets==12.0
 black
 ruff
 asgi-csrf
+pydantic_settings

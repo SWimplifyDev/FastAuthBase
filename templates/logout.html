@@ -3,7 +3,7 @@
 
 <head>
     {% include 'components/head.html' %}
-    <title>SWimplify>_ | Login</title>
+    <title>SWimplify>_ | Logout</title>
 </head>
 
 <body data-bs-theme="dark">
@@ -15,9 +15,9 @@
             <form class="shadow-lg p-4 border rounded" action="/logout" method="post">
                 <input type="hidden" name="csrftoken" value="{{ request.scope.csrftoken() }}">
                 <h3 class="mb-3">Logout</h3>
-                <p>Are you sure?</p>
+                <p>Sign out of your account?</p>
                 <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-custom">Yes, logout</button>
+                    <button type="submit" class="btn btn-custom">Logout</button>
                 </div>
 
             </form>

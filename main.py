@@ -16,6 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 import auth_manager
 import crud
+from config import settings
 from models import UserInDB
 
 app = FastAPI()
@@ -168,4 +169,8 @@ async def logout(response: Response):
     return response
 
 
-app = asgi_csrf(app, signing_secret="secret-goes-here", always_set_cookie=True)
+app = asgi_csrf(
+    app,
+    signing_secret=settings.secret_key,
+    always_set_cookie=True,
+)
