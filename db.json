@@ -11,6 +11,12 @@
             "email": "user@example.com",
             "full_name": "user",
             "password": "$2b$12$GWHIRPrdb0gI0T7Qaa9VNewBBG1iknj7ZkVYQjiMiCJ7IKF1SizoG"
+        },
+        "3": {
+            "disabled": false,
+            "email": "user2@me.com",
+            "full_name": "User 2",
+            "password": "$2b$12$X3nnAqaVTKtndxfgqidqhegA75WvibzXxdUN.NZ3//CXwR3BWgfma"
         }
     }
 }

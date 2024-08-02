@@ -1,28 +1,23 @@
 from fastapi import HTTPException
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from passlib.context import CryptContext
-
+from config import settings
 import crud
 from models import UserInDB
 
-SECRET_KEY = "secret-key"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-serializer = URLSafeTimedSerializer(SECRET_KEY)
-
+serializer = URLSafeTimedSerializer(settings.secret_key)
 
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
-
 
 def get_user(email: str):
     user_dict = crud.search_user(email)
     if user_dict:
         return UserInDB(**user_dict)
-
 
 def authenticate_user(email: str, password: str):
     user = get_user(email)
@@ -30,10 +25,8 @@ def authenticate_user(email: str, password: str):
         if verify_password(password, user.password):
             return user
 
-
 def encrypt_user(emial: str):
     return serializer.dumps(emial)
-
 
 def decrypt_user(session_token: str) -> str:
     try:
@@ -41,7 +34,6 @@ def decrypt_user(session_token: str) -> str:
     except (BadSignature, SignatureExpired):
         raise HTTPException(status_code=403, detail="Not authenticated")
     return username
-
 
 def check_permissions(session_token: str):
     if not session_token:

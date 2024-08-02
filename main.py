@@ -2,8 +2,6 @@ from typing import Annotated, Optional
 from fastapi import Cookie, Depends, FastAPI, Form, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
-#from asgi_csrf import asgi_csrf
-from config import settings
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -115,8 +113,3 @@ async def logout(response: Response):
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.delete_cookie("session_token")
     return response
-
-
-# app = asgi_csrf(app,
-#                 signing_secret=settings.secret_key,
-#                 always_set_cookie=True)
